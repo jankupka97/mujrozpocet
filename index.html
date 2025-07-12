@@ -1,612 +1,1839 @@
- <div class="grid xl:grid-cols-5 gap-8">
-        <!-- Input Form -->
-        <div class="xl:col-span-3">
-            <div class="glass-card rounded-3xl p-8 shadow-xl">
-                <!-- Income Section -->
-                <div class="mb-12">
-                    <div class="flex items-center mb-8">
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Můj rozpočet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .input-modern {
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+        .input-modern:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        .btn-modern {
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .btn-modern:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .section-divider {
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            height: 1px;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">Můj rozpočet</h1>
+            
+            <!-- Date and Name Section -->
+            <div class="max-w-2xl mx-auto mb-6">
+                <div class="glass-card rounded-2xl p-6 shadow-lg">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Automatic Date/Time -->
+                        <div class="text-left">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Datum a čas vytvoření</label>
+                            <div id="currentDateTime" class="px-4 py-3 bg-blue-50 rounded-xl border border-blue-200 text-blue-800 font-medium text-center">
+                                <!-- Date will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Name Input -->
+                        <div class="text-left">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Jméno a příjmení</label>
+                            <input type="text" id="fullName" placeholder="Zadejte své jméno a příjmení" class="w-full px-4 py-3 rounded-xl input-modern text-center font-medium" maxlength="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Moderní nástroj pro plánování vašeho měsíčního rozpočtu s přehledným zobrazením příjmů a výdajů</p>
+        </div>
+
+        <div class="grid xl:grid-cols-5 gap-8">
+            <!-- Input Form -->
+            <div class="xl:col-span-3">
+                <div class="glass-card rounded-3xl p-8 shadow-xl">
+                    <!-- Income Section -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-green-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Příjmy</h2>
+                        </div>
+                        
+                        <div class="grid gap-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">A.1 Měsíční příjem</label>
+                                    <input type="number" id="income" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                    <div class="grid grid-cols-4 gap-3 mt-4">
+                                        <button onclick="adjustIncome(-1000)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                        <button onclick="adjustIncome(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                        <button onclick="adjustIncome(500)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                        <button onclick="adjustIncome(5000)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">A.2 Aktuální zůstatek na účtě</label>
+                                    <input type="number" id="balance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                    <div class="grid grid-cols-4 gap-3 mt-4">
+                                        <button onclick="adjustBalance(-1000)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                        <button onclick="adjustBalance(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                        <button onclick="adjustBalance(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                        <button onclick="adjustBalance(1000)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">A.3 Příspěvek zaměstnavatele - vázaný benefit</label>
+                                    <input type="number" id="employerContribution" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                    <div class="grid grid-cols-4 gap-3 mt-4">
+                                        <button onclick="adjustEmployerContribution(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                        <button onclick="adjustEmployerContribution(-50)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
+                                        <button onclick="adjustEmployerContribution(50)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
+                                        <button onclick="adjustEmployerContribution(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">A.4 Můj příspěvek k vázanému benefitu z platu</label>
+                                    <input type="number" id="personalContribution" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                    <div class="grid grid-cols-4 gap-3 mt-4">
+                                        <button onclick="adjustPersonalContribution(-500)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                        <button onclick="adjustPersonalContribution(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                        <button onclick="adjustPersonalContribution(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                        <button onclick="adjustPersonalContribution(500)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">A.5 Srážka z platu (stravné, dary, výživné, exekuce)</label>
+                                    <input type="number" id="payrollDeduction" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                    <div class="grid grid-cols-4 gap-3 mt-4">
+                                        <button onclick="adjustPayrollDeduction(-500)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                        <button onclick="adjustPayrollDeduction(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                        <button onclick="adjustPayrollDeduction(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                        <button onclick="adjustPayrollDeduction(500)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mb-12"></div>
+
+                    <!-- Housing Expenses -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-orange-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Bydlení</h2>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.1 Náklady na bydlení (hypotéka, nájem)</label>
+                                <input type="number" id="housingCosts" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('housingCosts', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('housingCosts', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('housingCosts', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    <button onclick="adjustExpense('housingCosts', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.1.1 Fond oprav</label>
+                                <input type="number" id="repairFund" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('repairFund', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('repairFund', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                    <button onclick="adjustExpense('repairFund', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    <button onclick="adjustExpense('repairFund', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.2 Elektrická energie</label>
+                                <input type="number" id="electricity" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('electricity', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('electricity', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                    <button onclick="adjustExpense('electricity', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    <button onclick="adjustExpense('electricity', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.3 Plyn</label>
+                                <input type="number" id="gas" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('gas', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('gas', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                    <button onclick="adjustExpense('gas', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    <button onclick="adjustExpense('gas', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.4 Vodné/stočné</label>
+                                <input type="number" id="water" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('water', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('water', -50)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
+                                    <button onclick="adjustExpense('water', 50)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
+                                    <button onclick="adjustExpense('water', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.5 Topení</label>
+                                <input type="number" id="heating" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('heating', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('heating', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('heating', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                    <button onclick="adjustExpense('heating', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.6 Komunikační služby</label>
+                                <input type="number" id="communication" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('communication', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('communication', -50)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
+                                    <button onclick="adjustExpense('communication', 50)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
+                                    <button onclick="adjustExpense('communication', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">B.7 Pojištění domácnosti roční</label>
+                                <input type="number" id="homeInsurance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('homeInsurance', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
+                                    <button onclick="adjustExpense('homeInsurance', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('homeInsurance', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('homeInsurance', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mb-12"></div>
+
+                    <!-- Mobility Expenses -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-blue-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Mobilita</h2>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">C.1 Operativní leasing/úvěr</label>
+                                <input type="number" id="leasing" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('leasing', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
+                                    <button onclick="adjustExpense('leasing', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('leasing', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('leasing', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">C.2 Pohonné hmoty/měsíčně</label>
+                                <input type="number" id="fuel" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('fuel', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('fuel', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('fuel', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('fuel', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">C.3 Pojištění roční POV/HAV</label>
+                                <input type="number" id="insurance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('insurance', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('insurance', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('insurance', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    <button onclick="adjustExpense('insurance', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">C.4 Pravidelný servis roční</label>
+                                <input type="number" id="service" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('service', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('service', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('service', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                    <button onclick="adjustExpense('service', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mb-12"></div>
+
+                    <!-- Regular Expenses -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-purple-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Pravidelné výdaje</h2>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">D.1 Sport (posilovna, MultiSport, atd.)</label>
+                                <input type="number" id="sport" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('sport', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('sport', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                    <button onclick="adjustExpense('sport', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    <button onclick="adjustExpense('sport', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">D.2 Streamovací služby (Netflix, HBO, Disney, atd.)</label>
+                                <input type="number" id="streaming" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('streaming', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('streaming', -50)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
+                                    <button onclick="adjustExpense('streaming', 50)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
+                                    <button onclick="adjustExpense('streaming', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">D.3 Předplatné měsíční (software, aplikace, atd.)</label>
+                                <input type="number" id="monthlySubscriptions" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('monthlySubscriptions', -300)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-300</button>
+                                    <button onclick="adjustExpense('monthlySubscriptions', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
+                                    <button onclick="adjustExpense('monthlySubscriptions', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
+                                    <button onclick="adjustExpense('monthlySubscriptions', 300)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+300</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">D.4 Předplatné roční (licence, členství, atd.)</label>
+                                <input type="number" id="annualSubscriptions" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('annualSubscriptions', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
+                                    <button onclick="adjustExpense('annualSubscriptions', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('annualSubscriptions', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('annualSubscriptions', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mb-12"></div>
+
+                    <!-- Loans Section -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-red-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Úvěry</h2>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">E.1 Bankovní úvěr - splátka</label>
+                                <input type="number" id="bankLoans" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('bankLoans', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('bankLoans', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('bankLoans', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    <button onclick="adjustExpense('bankLoans', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">E.2 Nebankovní úvěr - splátka</label>
+                                <input type="number" id="nonBankLoans" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('nonBankLoans', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('nonBankLoans', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('nonBankLoans', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    <button onclick="adjustExpense('nonBankLoans', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider mb-12"></div>
+
+                    <!-- Planned Expenses Section -->
+                    <div class="mb-12">
+                        <div class="flex items-center mb-8">
+                            <div class="w-2 h-8 bg-indigo-500 rounded-full mr-4"></div>
+                            <h2 class="text-2xl font-bold text-gray-900">Plánované výdaje</h2>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.1 Náklady na dovolenou za rok</label>
+                                <input type="number" id="holidayCosts" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('holidayCosts', -10000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-10000</button>
+                                    <button onclick="adjustExpense('holidayCosts', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('holidayCosts', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                    <button onclick="adjustExpense('holidayCosts', 10000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+10000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.2 Jiný plánovaný výdaj měsíční</label>
+                                <input type="number" id="investments" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('investments', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
+                                    <button onclick="adjustExpense('investments', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('investments', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('investments', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.3 Jiný plánovaný výdaj roční</label>
+                                <input type="number" id="otherAnnualExpense" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('otherAnnualExpense', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('otherAnnualExpense', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('otherAnnualExpense', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                    <button onclick="adjustExpense('otherAnnualExpense', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.4 Školné roční</label>
+                                <input type="number" id="tuition" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('tuition', -10000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-10000</button>
+                                    <button onclick="adjustExpense('tuition', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
+                                    <button onclick="adjustExpense('tuition', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                                    <button onclick="adjustExpense('tuition', 10000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+10000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.5 Výdaj na děti</label>
+                                <input type="number" id="childrenExpenses" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('childrenExpenses', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
+                                    <button onclick="adjustExpense('childrenExpenses', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
+                                    <button onclick="adjustExpense('childrenExpenses', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
+                                    <button onclick="adjustExpense('childrenExpenses', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">F.6 Výdaj na mazlíčky</label>
+                                <input type="number" id="petExpenses" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
+                                <div class="grid grid-cols-4 gap-2 mt-3">
+                                    <button onclick="adjustExpense('petExpenses', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
+                                    <button onclick="adjustExpense('petExpenses', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
+                                    <button onclick="adjustExpense('petExpenses', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
+                                    <button onclick="adjustExpense('petExpenses', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateBudget()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-5 px-8 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 btn-modern shadow-lg">
+                        Vypočítat rozpočet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="xl:col-span-2 space-y-6">
+                <!-- Income Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
                         <div class="w-2 h-8 bg-green-500 rounded-full mr-4"></div>
-                        <h2 class="text-2xl font-bold text-gray-900">Příjmy</h2>
+                        <h3 class="text-xl font-bold text-gray-900">Příjmy</h3>
                     </div>
-                    
-                    <div class="grid gap-8">
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">A.1 Měsíční příjem</label>
-                                <input type="number" id="income" value="50000" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="50000">
-                                <div class="grid grid-cols-4 gap-3 mt-4">
-                                    <button onclick="adjustIncome(-1000)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                    <button onclick="adjustIncome(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                    <button onclick="adjustIncome(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                    <button onclick="adjustIncome(1000)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                                </div>
+                    <div id="incomePanel" class="space-y-4">
+                        <div class="text-center text-gray-400 py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
                             </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">A.2 Aktuální zůstatek na účtě</label>
-                                <input type="number" id="balance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                                <div class="grid grid-cols-4 gap-3 mt-4">
-                                    <button onclick="adjustBalance(-1000)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                    <button onclick="adjustBalance(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                    <button onclick="adjustBalance(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                    <button onclick="adjustBalance(1000)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">A.3 Příspěvek zaměstnavatele - vázaný benefit</label>
-                                <input type="number" id="employerContribution" value="300" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="300">
-                                <div class="grid grid-cols-4 gap-3 mt-4">
-                                    <button onclick="adjustEmployerContribution(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                    <button onclick="adjustEmployerContribution(-50)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
-                                    <button onclick="adjustEmployerContribution(50)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
-                                    <button onclick="adjustEmployerContribution(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">A.4 Můj příspěvek k vázanému benefitu z platu</label>
-                                <input type="number" id="personalContribution" value="1700" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="1700">
-                                <div class="grid grid-cols-4 gap-3 mt-4">
-                                    <button onclick="adjustPersonalContribution(-500)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                    <button onclick="adjustPersonalContribution(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                    <button onclick="adjustPersonalContribution(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                    <button onclick="adjustPersonalContribution(500)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">A.5 Srážka z platu (stravné, dary, výživné, exekuce)</label>
-                                <input type="number" id="payrollDeduction" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                                <div class="grid grid-cols-4 gap-3 mt-4">
-                                    <button onclick="adjustPayrollDeduction(-500)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                    <button onclick="adjustPayrollDeduction(-100)" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                    <button onclick="adjustPayrollDeduction(100)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                    <button onclick="adjustPayrollDeduction(500)" class="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                                </div>
-                            </div>
+                            <p class="text-sm font-medium">Vyplňte údaje pro zobrazení příjmů</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="section-divider mb-12"></div>
-
-                <!-- Housing Expenses -->
-                <div class="mb-12">
-                    <div class="flex items-center mb-8">
-                        <div class="w-2 h-8 bg-orange-500 rounded-full mr-4"></div>
-                        <h2 class="text-2xl font-bold text-gray-900">Bydlení</h2>
+                <!-- Expenses Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-2 h-8 bg-red-500 rounded-full mr-4"></div>
+                        <h3 class="text-xl font-bold text-gray-900">Výdaje</h3>
                     </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.1 Náklady na bydlení (hypotéka, nájem)</label>
-                            <input type="number" id="housingCosts" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('housingCosts', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
-                                <button onclick="adjustExpense('housingCosts', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                <button onclick="adjustExpense('housingCosts', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                                <button onclick="adjustExpense('housingCosts', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
+                    <div id="expensesPanel" class="space-y-4">
+                        <div class="text-center text-gray-400 py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
                             </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.1.1 Fond oprav</label>
-                            <input type="number" id="repairFund" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('repairFund', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('repairFund', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                <button onclick="adjustExpense('repairFund', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                <button onclick="adjustExpense('repairFund', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.2 Elektrická energie</label>
-                            <input type="number" id="electricity" value="1800" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="1800">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('electricity', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('electricity', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                <button onclick="adjustExpense('electricity', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                <button onclick="adjustExpense('electricity', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.3 Plyn</label>
-                            <input type="number" id="gas" value="1800" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="1800">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('gas', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('gas', -100)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-100</button>
-                                <button onclick="adjustExpense('gas', 100)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+100</button>
-                                <button onclick="adjustExpense('gas', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.4 Vodné/stočné</label>
-                            <input type="number" id="water" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('water', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
-                                <button onclick="adjustExpense('water', -50)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
-                                <button onclick="adjustExpense('water', 50)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
-                                <button onclick="adjustExpense('water', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.5 Komunikační služby</label>
-                            <input type="number" id="communication" value="300" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="300">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('communication', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
-                                <button onclick="adjustExpense('communication', -50)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-50</button>
-                                <button onclick="adjustExpense('communication', 50)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+50</button>
-                                <button onclick="adjustExpense('communication', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">B.6 Pojištění domácnosti roční</label>
-                            <input type="number" id="homeInsurance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('homeInsurance', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
-                                <button onclick="adjustExpense('homeInsurance', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('homeInsurance', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                                <button onclick="adjustExpense('homeInsurance', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
-                            </div>
+                            <p class="text-sm font-medium">Vyplňte údaje pro zobrazení výdajů</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="section-divider mb-12"></div>
-
-                <!-- Mobility Expenses -->
-                <div class="mb-12">
-                    <div class="flex items-center mb-8">
+                <!-- Budget Summary Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
                         <div class="w-2 h-8 bg-blue-500 rounded-full mr-4"></div>
-                        <h2 class="text-2xl font-bold text-gray-900">Mobilita</h2>
+                        <h3 class="text-xl font-bold text-gray-900">Rozpočtové shrnutí</h3>
+                    </div>
+                    <div id="budgetResults" class="space-y-4">
+                        <div class="text-center text-gray-400 py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium">Klikněte na "Vypočítat rozpočet"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Allocation Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-2 h-8 bg-emerald-500 rounded-full mr-4"></div>
+                        <h3 class="text-xl font-bold text-gray-900">Možné rozdělení úspor a investic</h3>
+                    </div>
+                    <div id="investmentAllocation" class="space-y-4">
+                        <div class="text-center text-gray-400 py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium">Investiční rozdělení se zobrazí po výpočtu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exchange Rates Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-2 h-8 bg-amber-500 rounded-full mr-4"></div>
+                        <h3 class="text-xl font-bold text-gray-900">Aktuální kurzy měn</h3>
+                    </div>
+                    <div id="exchangeRates" class="space-y-4">
+                        <div class="text-center text-gray-400 py-8">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium">Načítání kurzů...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budget Allocation Panel -->
+                <div class="glass-card rounded-3xl p-6 shadow-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-2 h-8 bg-teal-500 rounded-full mr-4"></div>
+                        <h3 class="text-xl font-bold text-gray-900">Rozdělení rozpočtu</h3>
+                    </div>
+                    <div id="budgetAllocation" class="space-y-4">
+                        <div class="text-center text-gray-400 py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium">Spořicí obálky se zobrazí po výpočtu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-16 glass-card rounded-3xl p-8 shadow-xl">
+            <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Tipy pro lepší rozpočet</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">Pravidlo 50/30/20</h4>
+                    <p class="text-gray-600 text-sm">50% potřeby, 30% přání, 20% úspory</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">Sledujte výdaje</h4>
+                    <p class="text-gray-600 text-sm">Zapisujte si všechny výdaje každý den</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-2">Nouzový fond</h4>
+                    <p class="text-gray-600 text-sm mb-3">Mějte rezervu na 3-6 měsíců výdajů</p>
+                    <div id="emergencyFundTip" class="bg-yellow-50 rounded-lg p-3 text-xs">
+                        <div class="text-yellow-700 font-medium">Doporučená rezerva:</div>
+                        <div class="text-yellow-600">Vyplňte příjem pro výpočet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Section -->
+        <div class="mt-12 glass-card rounded-3xl p-8 shadow-xl">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Sdílejte svůj rozpočet</h3>
+                <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Odešlete si kompletní souhrn rozpočtu e-mailem nebo jej sdílejte s finančním poradcem či rodinou</p>
+                
+                <button onclick="sendBudgetEmail()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 btn-modern shadow-lg inline-flex items-center space-x-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                    <span>Odeslat návrh rozpočtu e-mailem</span>
+                </button>
+                
+                <div class="mt-6 text-sm text-gray-500">
+                    <p>📧 Otevře se váš výchozí e-mailový klient s připravenou zprávou</p>
+                    <p class="mt-1">💡 Nejprve vypočítejte rozpočet pro získání kompletních údajů</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright Footer -->
+    <div class="mt-16 py-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center">
+                <div class="glass-card rounded-2xl p-6 shadow-lg inline-block">
+                    <div class="flex items-center justify-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-sm font-semibold text-gray-800">
+                                © <span id="currentYear">2024</span> Můj rozpočet - Vytvořil Kupkyn, verze 1.6
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Všechna práva vyhrazena. Moderní nástroj pro finanční plánování.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for exchange rates
+        let exchangeRates = {
+            USD: null,
+            EUR: null,
+            lastUpdated: null
+        };
+
+        // Initialize calculated fields on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date and time
+            setCurrentDateTime();
+            
+            // Set current year in copyright
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            updateEmergencyFundTip();
+            
+            // Load exchange rates
+            loadExchangeRates();
+            
+            // Add listener to income field for real-time updates
+            document.getElementById('income').addEventListener('input', updateEmergencyFundTip);
+        });
+
+        // Set current date and time in Czech format
+        function setCurrentDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZone: 'Europe/Prague'
+            };
+            
+            const czechDateTime = now.toLocaleDateString('cs-CZ', options);
+            document.getElementById('currentDateTime').textContent = czechDateTime;
+        }
+
+        // Update emergency fund tip based on income (A.1)
+        function updateEmergencyFundTip() {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const emergencyTipDiv = document.getElementById('emergencyFundTip');
+            
+            if (income > 0) {
+                const minReserve = income * 3;
+                const maxReserve = income * 6;
+                emergencyTipDiv.innerHTML = `
+                    <div class="text-yellow-700 font-medium">Doporučená rezerva:</div>
+                    <div class="text-yellow-600 font-bold">${minReserve.toLocaleString()} - ${maxReserve.toLocaleString()} Kč</div>
+                    <div class="text-yellow-500 text-xs mt-1">(3-6 měsíců z A.1: ${income.toLocaleString()} Kč)</div>
+                `;
+            } else {
+                emergencyTipDiv.innerHTML = `
+                    <div class="text-yellow-700 font-medium">Doporučená rezerva:</div>
+                    <div class="text-yellow-600">Zadejte příjem v A.1 pro automatický výpočet</div>
+                `;
+            }
+        }
+
+        // Adjust income with buttons
+        function adjustIncome(amount) {
+            const incomeInput = document.getElementById('income');
+            const currentValue = parseFloat(incomeInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            incomeInput.value = newValue;
+            updateEmergencyFundTip();
+        }
+
+        // Adjust balance with buttons
+        function adjustBalance(amount) {
+            const balanceInput = document.getElementById('balance');
+            const currentValue = parseFloat(balanceInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            balanceInput.value = newValue;
+        }
+
+        // Adjust employer contribution with buttons
+        function adjustEmployerContribution(amount) {
+            const contributionInput = document.getElementById('employerContribution');
+            const currentValue = parseFloat(contributionInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            contributionInput.value = newValue;
+        }
+
+        // Adjust personal contribution with buttons
+        function adjustPersonalContribution(amount) {
+            const contributionInput = document.getElementById('personalContribution');
+            const currentValue = parseFloat(contributionInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            contributionInput.value = newValue;
+        }
+
+        // Adjust payroll deduction with buttons
+        function adjustPayrollDeduction(amount) {
+            const deductionInput = document.getElementById('payrollDeduction');
+            const currentValue = parseFloat(deductionInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            deductionInput.value = newValue;
+        }
+
+        // Adjust expense with buttons
+        function adjustExpense(expenseId, amount) {
+            const expenseInput = document.getElementById(expenseId);
+            const currentValue = parseFloat(expenseInput.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            expenseInput.value = newValue;
+        }
+
+        function calculateBudget() {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const balance = parseFloat(document.getElementById('balance').value) || 0;
+            const employerContribution = parseFloat(document.getElementById('employerContribution').value) || 0;
+            const personalContribution = parseFloat(document.getElementById('personalContribution').value) || 0;
+            const payrollDeduction = parseFloat(document.getElementById('payrollDeduction').value) || 0;
+            
+            // Get housing expenses
+            const housingCosts = parseFloat(document.getElementById('housingCosts').value) || 0;
+            const repairFund = parseFloat(document.getElementById('repairFund').value) || 0;
+            const electricity = parseFloat(document.getElementById('electricity').value) || 0;
+            const gas = parseFloat(document.getElementById('gas').value) || 0;
+            const water = parseFloat(document.getElementById('water').value) || 0;
+            const heating = parseFloat(document.getElementById('heating').value) || 0;
+            const communication = parseFloat(document.getElementById('communication').value) || 0;
+            const homeInsurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
+            const monthlyHomeInsurance = Math.round(homeInsurance / 12); // Convert annual to monthly
+            
+            // Get mobility expenses
+            const leasing = parseFloat(document.getElementById('leasing').value) || 0;
+            const fuel = parseFloat(document.getElementById('fuel').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const monthlyInsurance = Math.round(insurance / 12); // Convert annual to monthly
+            const service = parseFloat(document.getElementById('service').value) || 0;
+            const monthlyService = Math.round(service / 12); // Convert annual to monthly
+            
+            // Get regular expenses
+            const sport = parseFloat(document.getElementById('sport').value) || 0;
+            const streaming = parseFloat(document.getElementById('streaming').value) || 0;
+            const monthlySubscriptions = parseFloat(document.getElementById('monthlySubscriptions').value) || 0;
+            const annualSubscriptions = parseFloat(document.getElementById('annualSubscriptions').value) || 0;
+            const monthlyAnnualSubscriptions = Math.round(annualSubscriptions / 12); // Convert annual to monthly
+            
+            // Get loan expenses
+            const bankLoans = parseFloat(document.getElementById('bankLoans').value) || 0;
+            const nonBankLoans = parseFloat(document.getElementById('nonBankLoans').value) || 0;
+            
+            // Get planned expenses
+            const holidayCosts = parseFloat(document.getElementById('holidayCosts').value) || 0;
+            const monthlyHolidayCosts = Math.round(holidayCosts / 12); // Convert annual to monthly
+            const investments = parseFloat(document.getElementById('investments').value) || 0;
+            const otherAnnualExpense = parseFloat(document.getElementById('otherAnnualExpense').value) || 0;
+            const monthlyOtherAnnualExpense = Math.round(otherAnnualExpense / 12); // Convert annual to monthly
+            const tuition = parseFloat(document.getElementById('tuition').value) || 0;
+            const monthlyTuition = Math.round(tuition / 12); // Convert annual to monthly
+            const childrenExpenses = parseFloat(document.getElementById('childrenExpenses').value) || 0;
+            const petExpenses = parseFloat(document.getElementById('petExpenses').value) || 0;
+            
+            const totalHousingExpenses = housingCosts + repairFund + electricity + gas + water + heating + communication + monthlyHomeInsurance;
+            const totalMobilityExpenses = leasing + fuel + monthlyInsurance + monthlyService;
+            const totalRegularExpenses = sport + streaming + monthlySubscriptions + monthlyAnnualSubscriptions;
+            const totalLoanExpenses = bankLoans + nonBankLoans;
+            const totalPlannedExpenses = monthlyHolidayCosts + investments + monthlyOtherAnnualExpense + monthlyTuition + childrenExpenses + petExpenses;
+            const totalFixedExpenses = totalHousingExpenses + totalMobilityExpenses + totalRegularExpenses + totalLoanExpenses + totalPlannedExpenses;
+
+            if (income <= 0) {
+                alert('Prosím zadejte váš měsíční příjem');
+                return;
+            }
+
+            // Calculate A.6 and A.7
+            const accountTransfer = income - personalContribution - payrollDeduction;
+            const benefitTransfer = employerContribution + personalContribution;
+
+            const totalAvailable = accountTransfer + balance;
+            
+            if (totalFixedExpenses >= totalAvailable) {
+                alert('Celkové pevné výdaje nemohou být vyšší než dostupné prostředky');
+                return;
+            }
+
+            // Simple budget calculation
+            const availableAfterFixed = totalAvailable - totalFixedExpenses;
+            const savings = Math.round(availableAfterFixed * 0.2); // 20% for savings
+            const emergency = Math.round(availableAfterFixed * 0.1); // 10% for emergency
+            const flexible = availableAfterFixed - savings - emergency;
+
+            // Calculate projections
+            const endOfMonthBalance = flexible + savings + emergency;
+            const emergencyFundGoal = totalFixedExpenses * 3;
+            const emergencyProgress = Math.round(emergency / emergencyFundGoal * 100);
+
+            displayResults({
+                income,
+                balance,
+                employerContribution,
+                personalContribution,
+                payrollDeduction,
+                accountTransfer,
+                benefitTransfer,
+                totalAvailable,
+                housingCosts,
+                repairFund,
+                electricity,
+                gas,
+                water,
+                heating,
+                communication,
+                homeInsurance,
+                monthlyHomeInsurance,
+                leasing,
+                fuel,
+                insurance,
+                monthlyInsurance,
+                service,
+                monthlyService,
+                sport,
+                streaming,
+                monthlySubscriptions,
+                annualSubscriptions,
+                monthlyAnnualSubscriptions,
+                bankLoans,
+                nonBankLoans,
+                holidayCosts,
+                monthlyHolidayCosts,
+                investments,
+                otherAnnualExpense,
+                monthlyOtherAnnualExpense,
+                tuition,
+                monthlyTuition,
+                childrenExpenses,
+                petExpenses,
+                totalHousingExpenses,
+                totalMobilityExpenses,
+                totalRegularExpenses,
+                totalLoanExpenses,
+                totalPlannedExpenses,
+                totalFixedExpenses,
+                savings,
+                flexible,
+                emergency,
+                endOfMonthBalance,
+                emergencyProgress
+            });
+        }
+
+        // Load exchange rates from Frankfurter API
+        async function loadExchangeRates() {
+            try {
+                const response = await fetch('https://api.frankfurter.app/latest?from=CZK&to=USD,EUR');
+                const data = await response.json();
+                
+                if (data.rates && data.rates.USD && data.rates.EUR) {
+                    // Frankfurter gives us rates FROM CZK, so we need to invert them to get CZK per foreign currency
+                    exchangeRates.USD = 1 / data.rates.USD;
+                    exchangeRates.EUR = 1 / data.rates.EUR;
+                    exchangeRates.lastUpdated = new Date();
+                    
+                    displayExchangeRates();
+                } else {
+                    throw new Error('Kurzy nenalezeny');
+                }
+            } catch (error) {
+                console.error('Chyba při načítání kurzů:', error);
+                // Fallback to approximate rates if API fails
+                exchangeRates.USD = 23.5;
+                exchangeRates.EUR = 25.2;
+                exchangeRates.lastUpdated = new Date();
+                displayExchangeRates(true);
+            }
+        }
+
+        // Display exchange rates
+        function displayExchangeRates(isApproximate = false) {
+            const ratesDiv = document.getElementById('exchangeRates');
+            const updateTime = exchangeRates.lastUpdated.toLocaleString('cs-CZ');
+            
+            ratesDiv.innerHTML = `
+                <div class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                        <span class="text-white font-bold text-sm">$</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-blue-800">USD/CZK</div>
+                                        <div class="text-xs text-blue-600">Americký dolar</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-blue-800">${exchangeRates.USD.toFixed(2)}</div>
+                                    <div class="text-xs text-blue-600">Kč za 1 USD</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center mr-3">
+                                        <span class="text-white font-bold text-sm">€</span>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-indigo-800">EUR/CZK</div>
+                                        <div class="text-xs text-indigo-600">Euro</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-indigo-800">${exchangeRates.EUR.toFixed(2)}</div>
+                                    <div class="text-xs text-indigo-600">Kč za 1 EUR</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">C.1 Operativní leasing/úvěr</label>
-                            <input type="number" id="leasing" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('leasing', -2000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-2000</button>
-                                <button onclick="adjustExpense('leasing', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('leasing', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                                <button onclick="adjustExpense('leasing', 2000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+2000</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">C.2 Pohonné hmoty/měsíčně</label>
-                            <input type="number" id="fuel" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('fuel', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                <button onclick="adjustExpense('fuel', -500)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-500</button>
-                                <button onclick="adjustExpense('fuel', 500)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+500</button>
-                                <button onclick="adjustExpense('fuel', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">C.3 Pojištění roční POV/HAV</label>
-                            <input type="number" id="insurance" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('insurance', -5000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-5000</button>
-                                <button onclick="adjustExpense('insurance', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                <button onclick="adjustExpense('insurance', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                                <button onclick="adjustExpense('insurance', 5000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+5000</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">C.4 Pravidelný servis roční</label>
-                            <input type="number" id="service" value="0" class="w-full px-6 py-4 rounded-xl input-modern text-lg font-medium" placeholder="0">
-                            <div class="grid grid-cols-4 gap-2 mt-3">
-                                <button onclick="adjustExpense('service', -1000)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-1000</button>
-                                <button onclick="adjustExpense('service', -200)" class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-medium hover:bg-red-100 btn-modern border border-red-200">-200</button>
-                                <button onclick="adjustExpense('service', 200)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+200</button>
-                                <button onclick="adjustExpense('service', 1000)" class="px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-medium hover:bg-green-100 btn-modern border border-green-200">+1000</button>
-                            </div>
-                        </div>
+                    <div class="text-center text-xs text-gray-500 bg-gray-50 rounded-lg p-3">
+                        ${isApproximate ? 
+                            '⚠️ Přibližné kurzy (API nedostupné) • ' : 
+                            '📊 Kurzy Frankfurter API • '
+                        }
+                        Aktualizováno: ${updateTime}
+                        <button onclick="loadExchangeRates()" class="ml-2 text-blue-600 hover:text-blue-800 underline">
+                            Obnovit kurzy
+                        </button>
                     </div>
                 </div>
-
-                <button onclick="calculateBudget()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-5 px-8 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 btn-modern shadow-lg">
-                    Vypočítat rozpočet
-                </button>
-            </div>
-        </div>
-
-        <!-- Results -->
-        <div class="xl:col-span-2 space-y-6">
-            <!-- Income Panel -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl">
-                <div class="flex items-center mb-6">
-                    <div class="w-2 h-8 bg-green-500 rounded-full mr-4"></div>
-                    <h3 class="text-xl font-bold text-gray-900">Příjmy</h3>
-                </div>
-                <div id="incomePanel" class="space-y-4">
-                    <div class="text-center text-gray-400 py-12">
-                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-medium">Vyplňte údaje pro zobrazení příjmů</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Expenses Panel -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl">
-                <div class="flex items-center mb-6">
-                    <div class="w-2 h-8 bg-red-500 rounded-full mr-4"></div>
-                    <h3 class="text-xl font-bold text-gray-900">Výdaje</h3>
-                </div>
-                <div id="expensesPanel" class="space-y-4">
-                    <div class="text-center text-gray-400 py-12">
-                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-medium">Vyplňte údaje pro zobrazení výdajů</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Budget Summary Panel -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl">
-                <div class="flex items-center mb-6">
-                    <div class="w-2 h-8 bg-blue-500 rounded-full mr-4"></div>
-                    <h3 class="text-xl font-bold text-gray-900">Rozpočtové shrnutí</h3>
-                </div>
-                <div id="budgetResults" class="space-y-4">
-                    <div class="text-center text-gray-400 py-12">
-                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-medium">Klikněte na "Vypočítat rozpočet"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tips Section -->
-    <div class="mt-16 glass-card rounded-3xl p-8 shadow-xl">
-        <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Tipy pro lepší rozpočet</h3>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="text-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <h4 class="font-bold text-gray-900 mb-2">Pravidlo 50/30/20</h4>
-                <p class="text-gray-600 text-sm">50% potřeby, 30% přání, 20% úspory</p>
-            </div>
-            <div class="text-center">
-                <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                </div>
-                <h4 class="font-bold text-gray-900 mb-2">Sledujte výdaje</h4>
-                <p class="text-gray-600 text-sm">Zapisujte si všechny výdaje každý den</p>
-            </div>
-            <div class="text-center">
-                <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
-                </div>
-                <h4 class="font-bold text-gray-900 mb-2">Nouzový fond</h4>
-                <p class="text-gray-600 text-sm">Mějte rezervu na 3-6 měsíců výdajů</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Adjust income with buttons
-    function adjustIncome(amount) {
-        const incomeInput = document.getElementById('income');
-        const currentValue = parseFloat(incomeInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        incomeInput.value = newValue;
-    }
-
-    // Adjust balance with buttons
-    function adjustBalance(amount) {
-        const balanceInput = document.getElementById('balance');
-        const currentValue = parseFloat(balanceInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        balanceInput.value = newValue;
-    }
-
-    // Adjust employer contribution with buttons
-    function adjustEmployerContribution(amount) {
-        const contributionInput = document.getElementById('employerContribution');
-        const currentValue = parseFloat(contributionInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        contributionInput.value = newValue;
-    }
-
-    // Adjust personal contribution with buttons
-    function adjustPersonalContribution(amount) {
-        const contributionInput = document.getElementById('personalContribution');
-        const currentValue = parseFloat(contributionInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        contributionInput.value = newValue;
-    }
-
-    // Adjust payroll deduction with buttons
-    function adjustPayrollDeduction(amount) {
-        const deductionInput = document.getElementById('payrollDeduction');
-        const currentValue = parseFloat(deductionInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        deductionInput.value = newValue;
-    }
-
-    // Adjust expense with buttons
-    function adjustExpense(expenseId, amount) {
-        const expenseInput = document.getElementById(expenseId);
-        const currentValue = parseFloat(expenseInput.value) || 0;
-        const newValue = Math.max(0, currentValue + amount);
-        expenseInput.value = newValue;
-    }
-
-    function calculateBudget() {
-        const income = parseFloat(document.getElementById('income').value) || 0;
-        const balance = parseFloat(document.getElementById('balance').value) || 0;
-        const employerContribution = parseFloat(document.getElementById('employerContribution').value) || 0;
-        const personalContribution = parseFloat(document.getElementById('personalContribution').value) || 0;
-        const payrollDeduction = parseFloat(document.getElementById('payrollDeduction').value) || 0;
-        
-        // Get housing expenses
-        const housingCosts = parseFloat(document.getElementById('housingCosts').value) || 0;
-        const repairFund = parseFloat(document.getElementById('repairFund').value) || 0;
-        const electricity = parseFloat(document.getElementById('electricity').value) || 0;
-        const gas = parseFloat(document.getElementById('gas').value) || 0;
-        const water = parseFloat(document.getElementById('water').value) || 0;
-        const communication = parseFloat(document.getElementById('communication').value) || 0;
-        const homeInsurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
-        const monthlyHomeInsurance = homeInsurance / 12; // Convert annual to monthly
-        
-        // Get mobility expenses
-        const leasing = parseFloat(document.getElementById('leasing').value) || 0;
-        const fuel = parseFloat(document.getElementById('fuel').value) || 0;
-        const insurance = parseFloat(document.getElementById('insurance').value) || 0;
-        const monthlyInsurance = insurance / 12; // Convert annual to monthly
-        const service = parseFloat(document.getElementById('service').value) || 0;
-        const monthlyService = service / 12; // Convert annual to monthly
-        
-        const totalHousingExpenses = housingCosts + repairFund + electricity + gas + water + communication + monthlyHomeInsurance;
-        const totalMobilityExpenses = leasing + fuel + monthlyInsurance + monthlyService;
-        const totalFixedExpenses = totalHousingExpenses + totalMobilityExpenses;
-
-        if (income <= 0) {
-            alert('Prosím zadejte váš měsíční příjem');
-            return;
+            `;
         }
 
-        const totalAvailable = income + balance + employerContribution - personalContribution - payrollDeduction;
-        
-        if (totalFixedExpenses >= totalAvailable) {
-            alert('Celkové pevné výdaje nemohou být vyšší než dostupné prostředky');
-            return;
+        // Global variable to store the last calculated budget
+        let lastCalculatedBudget = null;
+
+        function sendBudgetEmail() {
+            if (!lastCalculatedBudget) {
+                alert('Nejprve prosím vypočítejte rozpočet pomocí tlačítka "Vypočítat rozpočet"');
+                return;
+            }
+
+            const budget = lastCalculatedBudget;
+            const currentDate = new Date().toLocaleDateString('cs-CZ');
+            const fullName = document.getElementById('fullName').value.trim();
+            
+            // Create email subject
+            const subject = encodeURIComponent(`Můj osobní rozpočet${fullName ? ' - ' + fullName : ''} - ${currentDate}`);
+            
+            // Calculate investment allocations for email
+            const czkInvestment = budget.benefitTransfer;
+            const foreignInvestment = budget.savings;
+            const usdAllocation = Math.round(foreignInvestment * 0.6);
+            const eurAllocation = foreignInvestment - usdAllocation;
+            
+            // Calculate spořicí obálky for email
+            const savingsEnvelopes = [];
+            if (budget.homeInsurance > 0) savingsEnvelopes.push({name: 'Pojištění domácnosti', monthly: budget.monthlyHomeInsurance, annual: budget.homeInsurance});
+            if (budget.insurance > 0) savingsEnvelopes.push({name: 'Pojištění vozidla', monthly: budget.monthlyInsurance, annual: budget.insurance});
+            if (budget.service > 0) savingsEnvelopes.push({name: 'Servis vozidla', monthly: budget.monthlyService, annual: budget.service});
+            if (budget.annualSubscriptions > 0) savingsEnvelopes.push({name: 'Roční předplatné', monthly: budget.monthlyAnnualSubscriptions, annual: budget.annualSubscriptions});
+            if (budget.holidayCosts > 0) savingsEnvelopes.push({name: 'Dovolená', monthly: budget.monthlyHolidayCosts, annual: budget.holidayCosts});
+            if (budget.otherAnnualExpense > 0) savingsEnvelopes.push({name: 'Jiný roční výdaj', monthly: budget.monthlyOtherAnnualExpense, annual: budget.otherAnnualExpense});
+            if (budget.tuition > 0) savingsEnvelopes.push({name: 'Školné', monthly: budget.monthlyTuition, annual: budget.tuition});
+            
+            const totalEnvelopeSavings = savingsEnvelopes.reduce((sum, envelope) => sum + envelope.monthly, 0);
+            const totalWithEmergency = totalEnvelopeSavings + budget.emergency;
+
+            // Create detailed email body
+            const emailBody = `
+MŮJROSPOČET - OSOBNÍ FINANČNÍ PLÁN${fullName ? '\nSestaven pro: ' + fullName : ''}
+Datum vytvoření: ${currentDate}
+
+═══════════════════════════════════════════════════════════════
+
+📊 SHRNUTÍ ROZPOČTU
+
+Celkové prostředky k dispozici: ${budget.totalAvailable.toLocaleString()} Kč
+Celkové výdaje: ${budget.totalFixedExpenses.toLocaleString()} Kč
+Zbývá po výdajích: ${(budget.totalAvailable - budget.totalFixedExpenses).toLocaleString()} Kč
+
+Míra úspor: ${Math.round((budget.savings + budget.emergency + budget.benefitTransfer) / (budget.totalAvailable + budget.benefitTransfer) * 100)}%
+
+═══════════════════════════════════════════════════════════════
+
+💰 PŘÍJMY - DETAILNÍ ROZPIS
+
+A.1 Měsíční příjem: ${budget.income.toLocaleString()} Kč
+A.2 Aktuální zůstatek na účtě: ${budget.balance.toLocaleString()} Kč
+A.3 Příspěvek zaměstnavatele - benefit: ${budget.employerContribution.toLocaleString()} Kč
+A.4 Můj příspěvek k benefitu: ${budget.personalContribution.toLocaleString()} Kč
+A.5 Srážka z platu: ${budget.payrollDeduction.toLocaleString()} Kč
+
+A.6 Převod na běžný účet (A.1-A.4-A.5): ${budget.accountTransfer.toLocaleString()} Kč
+A.7 Převod na benefit (A.3+A.4): ${budget.benefitTransfer.toLocaleString()} Kč
+
+CELKEM K DISPOZICI (A.6+A.2): ${budget.totalAvailable.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+🏠 BYDLENÍ - CELKEM: ${budget.totalHousingExpenses.toLocaleString()} Kč
+
+B.1 Náklady na bydlení (hypotéka, nájem): ${budget.housingCosts.toLocaleString()} Kč
+B.1.1 Fond oprav: ${budget.repairFund.toLocaleString()} Kč
+B.2 Elektrická energie: ${budget.electricity.toLocaleString()} Kč
+B.3 Plyn: ${budget.gas.toLocaleString()} Kč
+B.4 Vodné/stočné: ${budget.water.toLocaleString()} Kč
+B.5 Topení: ${budget.heating.toLocaleString()} Kč
+B.6 Komunikační služby: ${budget.communication.toLocaleString()} Kč
+B.7 Pojištění domácnosti (${budget.homeInsurance.toLocaleString()} Kč/rok): ${budget.monthlyHomeInsurance.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+🚗 MOBILITA - CELKEM: ${budget.totalMobilityExpenses.toLocaleString()} Kč
+
+C.1 Operativní leasing/úvěr: ${budget.leasing.toLocaleString()} Kč
+C.2 Pohonné hmoty/měsíčně: ${budget.fuel.toLocaleString()} Kč
+C.3 Pojištění POV/HAV (${budget.insurance.toLocaleString()} Kč/rok): ${budget.monthlyInsurance.toLocaleString()} Kč
+C.4 Pravidelný servis (${budget.service.toLocaleString()} Kč/rok): ${budget.monthlyService.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+🔄 PRAVIDELNÉ VÝDAJE - CELKEM: ${budget.totalRegularExpenses.toLocaleString()} Kč
+
+D.1 Sport (posilovna, MultiSport): ${budget.sport.toLocaleString()} Kč
+D.2 Streamovací služby (Netflix, HBO): ${budget.streaming.toLocaleString()} Kč
+D.3 Předplatné měsíční (software, aplikace): ${budget.monthlySubscriptions.toLocaleString()} Kč
+D.4 Předplatné roční (${budget.annualSubscriptions.toLocaleString()} Kč/rok): ${budget.monthlyAnnualSubscriptions.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+💳 ÚVĚRY - CELKEM: ${budget.totalLoanExpenses.toLocaleString()} Kč
+
+E.1 Bankovní úvěr - splátka: ${budget.bankLoans.toLocaleString()} Kč
+E.2 Nebankovní úvěr - splátka: ${budget.nonBankLoans.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+📅 PLÁNOVANÉ VÝDAJE - CELKEM: ${budget.totalPlannedExpenses.toLocaleString()} Kč
+
+F.1 Náklady na dovolenou (${budget.holidayCosts.toLocaleString()} Kč/rok): ${budget.monthlyHolidayCosts.toLocaleString()} Kč
+F.2 Jiný plánovaný výdaj měsíční: ${budget.investments.toLocaleString()} Kč
+F.3 Jiný plánovaný výdaj roční (${budget.otherAnnualExpense.toLocaleString()} Kč/rok): ${budget.monthlyOtherAnnualExpense.toLocaleString()} Kč
+F.4 Školné roční (${budget.tuition.toLocaleString()} Kč/rok): ${budget.monthlyTuition.toLocaleString()} Kč
+F.5 Výdaj na děti: ${budget.childrenExpenses.toLocaleString()} Kč
+F.6 Výdaj na mazlíčky: ${budget.petExpenses.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+💡 DOPORUČENÉ ROZDĚLENÍ ZBÝVAJÍCÍCH PROSTŘEDKŮ
+
+✅ Úspory pro investice (20%): ${budget.savings.toLocaleString()} Kč
+🛡️ Nouzová rezerva (10%): ${budget.emergency.toLocaleString()} Kč
+🛒 Volné prostředky (jídlo, zábava): ${budget.flexible.toLocaleString()} Kč
+
+═══════════════════════════════════════════════════════════════
+
+📦 SPOŘICÍ OBÁLKY - CELKEM: ${totalWithEmergency.toLocaleString()} Kč/měsíc
+
+🛡️ Nouzová rezerva: ${budget.emergency.toLocaleString()} Kč/měsíc
+   Cíl: ${(budget.totalFixedExpenses * 3).toLocaleString()} - ${(budget.totalFixedExpenses * 6).toLocaleString()} Kč
+   Pokrok: ${budget.emergencyProgress}%
+
+${savingsEnvelopes.map(envelope => 
+`📋 ${envelope.name}: ${envelope.monthly.toLocaleString()} Kč/měsíc (${envelope.annual.toLocaleString()} Kč/rok)`
+).join('\n')}
+
+═══════════════════════════════════════════════════════════════
+
+💰 INVESTIČNÍ ROZDĚLENÍ - CELKEM: ${(czkInvestment + foreignInvestment).toLocaleString()} Kč
+
+🇨🇿 INVESTICE V CZK (Benefit): ${czkInvestment.toLocaleString()} Kč
+   → České akcie, dluhopisy, REITs
+
+💱 INVESTICE V ZAHRANIČNÍCH MĚNÁCH (Úspory): ${foreignInvestment.toLocaleString()} Kč
+   💵 USD investice (60%): ${usdAllocation.toLocaleString()} Kč${exchangeRates.USD ? ` ≈ $${Math.round(usdAllocation / exchangeRates.USD).toLocaleString()}` : ''}
+   💶 EUR investice (40%): ${eurAllocation.toLocaleString()} Kč${exchangeRates.EUR ? ` ≈ €${Math.round(eurAllocation / exchangeRates.EUR).toLocaleString()}` : ''}
+
+${exchangeRates.USD && exchangeRates.EUR ? `
+📊 AKTUÁLNÍ KURZY (${exchangeRates.lastUpdated.toLocaleDateString('cs-CZ')}):
+   USD/CZK: ${exchangeRates.USD.toFixed(2)}
+   EUR/CZK: ${exchangeRates.EUR.toFixed(2)}
+` : ''}
+
+═══════════════════════════════════════════════════════════════
+
+📈 FINANČNÍ CÍLE A DOPORUČENÍ
+
+• Celkové měsíční úspory: ${(budget.savings + budget.emergency + budget.benefitTransfer).toLocaleString()} Kč
+• Míra úspor: ${Math.round((budget.savings + budget.emergency + budget.benefitTransfer) / (budget.totalAvailable + budget.benefitTransfer) * 100)}%
+• Doporučená nouzová rezerva: ${(budget.totalFixedExpenses * 3).toLocaleString()} - ${(budget.totalFixedExpenses * 6).toLocaleString()} Kč
+• Pokrok nouzové rezervy: ${budget.emergencyProgress}%
+
+═══════════════════════════════════════════════════════════════
+
+💰 PRAVIDLO 50/30/20:
+• 50% na potřeby (bydlení, jídlo, doprava)
+• 30% na přání (zábava, koníčky)
+• 20% na úspory a investice
+
+💡 INVESTIČNÍ TIPY:
+• Diverzifikace: Rozdělte investice mezi různé trhy a měny
+• DCA strategie: Investujte pravidelně stejnou částku každý měsíc
+• ETF fondy: Zvažte široce diverzifikované indexové fondy
+• Dlouhodobý horizont: Investice držte minimálně 5-10 let
+• Benefit: Využijte daňové výhody zaměstnaneckých benefitů
+
+📊 Tento rozpočet byl vytvořen pomocí aplikace MůjRozpočet
+🔄 Pravidelně aktualizujte své údaje pro přesné plánování
+
+═══════════════════════════════════════════════════════════════
+            `.trim();
+
+            // Create mailto link
+            const mailtoLink = `mailto:?subject=${subject}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
         }
 
-        // Simple budget calculation
-        const availableAfterFixed = totalAvailable - totalFixedExpenses;
-        const savings = availableAfterFixed * 0.2; // 20% for savings
-        const emergency = availableAfterFixed * 0.1; // 10% for emergency
-        const flexible = availableAfterFixed - savings - emergency;
-
-        // Calculate projections
-        const endOfMonthBalance = flexible + savings + emergency;
-        const emergencyFundGoal = totalFixedExpenses * 3;
-        const emergencyProgress = (emergency / emergencyFundGoal * 100).toFixed(1);
-
-        displayResults({
-            income,
-            balance,
-            employerContribution,
-            personalContribution,
-            payrollDeduction,
-            totalAvailable,
-            housingCosts,
-            repairFund,
-            electricity,
-            gas,
-            water,
-            communication,
-            homeInsurance,
-            monthlyHomeInsurance,
-            leasing,
-            fuel,
-            insurance,
-            monthlyInsurance,
-            service,
-            monthlyService,
-            totalHousingExpenses,
-            totalMobilityExpenses,
-            totalFixedExpenses,
-            savings,
-            flexible,
-            emergency,
-            endOfMonthBalance,
-            emergencyProgress
-        });
-    }
-
-    function displayResults(budget) {
-        // Update Income Panel
-        const incomePanel = document.getElementById('incomePanel');
-        incomePanel.innerHTML = `
-            <div class="space-y-4">
-                <div class="flex justify-between items-center p-4 bg-green-50 rounded-2xl border border-green-100">
-                    <span class="font-semibold text-green-800">Měsíční příjem</span>
-                    <span class="text-xl font-bold text-green-800">${budget.income.toLocaleString()} Kč</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-purple-50 rounded-2xl border border-purple-100">
-                    <span class="font-semibold text-purple-800">Aktuální zůstatek</span>
-                    <span class="text-xl font-bold text-purple-800">${budget.balance.toLocaleString()} Kč</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-teal-50 rounded-2xl border border-teal-100">
-                    <span class="font-semibold text-teal-800">Příspěvek zaměstnavatele</span>
-                    <span class="text-xl font-bold text-teal-800">${budget.employerContribution.toLocaleString()} Kč</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-red-50 rounded-2xl border border-red-100">
-                    <span class="font-semibold text-red-800">Můj příspěvek k benefitu</span>
-                    <span class="text-xl font-bold text-red-800">-${budget.personalContribution.toLocaleString()} Kč</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-pink-50 rounded-2xl border border-pink-100">
-                    <span class="font-semibold text-pink-800">Srážka z platu</span>
-                    <span class="text-xl font-bold text-pink-800">-${budget.payrollDeduction.toLocaleString()} Kč</span>
-                </div>
-                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                    <span class="font-bold text-blue-800">Celkem k dispozici</span>
-                    <span class="text-2xl font-bold text-blue-800">${budget.totalAvailable.toLocaleString()} Kč</span>
-                </div>
-            </div>
-        `;
-
-        // Update Expenses Panel
-        const expensesPanel = document.getElementById('expensesPanel');
-        expensesPanel.innerHTML = `
-            <div class="space-y-4">
-                <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-orange-800">Bydlení celkem</span>
-                        <span class="text-xl font-bold text-orange-800">${budget.totalHousingExpenses.toLocaleString()} Kč</span>
+        function displayResults(budget) {
+            // Store the budget for email functionality
+            lastCalculatedBudget = budget;
+            
+            // Update Income Panel
+            const incomePanel = document.getElementById('incomePanel');
+            incomePanel.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-green-50 rounded-2xl border border-green-100">
+                        <div>
+                            <div class="font-semibold text-green-800">Měsíční příjem</div>
+                            <div class="text-sm text-green-600">(A.1-A.4-A.5)</div>
+                        </div>
+                        <span class="text-xl font-bold text-green-800">${budget.accountTransfer.toLocaleString()} Kč</span>
                     </div>
-                    <div class="space-y-1 text-sm text-orange-600">
-                        <div class="flex justify-between">
-                            <span>• Náklady na bydlení</span>
-                            <span>${budget.housingCosts.toLocaleString()} Kč</span>
+                    <div class="flex justify-between items-center p-4 bg-purple-50 rounded-2xl border border-purple-100">
+                        <div>
+                            <div class="font-semibold text-purple-800">Aktuální zůstatek na BÚ</div>
+                            <div class="text-sm text-purple-600">(A.2)</div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>• Fond oprav</span>
-                            <span>${budget.repairFund.toLocaleString()} Kč</span>
+                        <span class="text-xl font-bold text-purple-800">${budget.balance.toLocaleString()} Kč</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                        <div>
+                            <div class="font-bold text-blue-800">Celkem k dispozici</div>
+                            <div class="text-sm text-blue-600">(A.1-A.4-A.5+A.2)</div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>• Elektřina</span>
-                            <span>${budget.electricity.toLocaleString()} Kč</span>
+                        <span class="text-2xl font-bold text-blue-800">${budget.totalAvailable.toLocaleString()} Kč</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-cyan-50 rounded-2xl border border-cyan-100">
+                        <div>
+                            <div class="font-semibold text-cyan-800">Převod na benefit</div>
+                            <div class="text-sm text-cyan-600">(A.3+A.4)</div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>• Plyn</span>
-                            <span>${budget.gas.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Vodné/stočné</span>
-                            <span>${budget.water.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Komunikace</span>
-                            <span>${budget.communication.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Pojištění domácnosti</span>
-                            <span>${budget.monthlyHomeInsurance.toLocaleString()} Kč</span>
-                        </div>
+                        <span class="text-xl font-bold text-cyan-800">${budget.benefitTransfer.toLocaleString()} Kč</span>
                     </div>
                 </div>
+            `;
 
-                <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-blue-800">Mobilita celkem</span>
-                        <span class="text-xl font-bold text-blue-800">${budget.totalMobilityExpenses.toLocaleString()} Kč</span>
+            // Update Expenses Panel
+            const expensesPanel = document.getElementById('expensesPanel');
+            expensesPanel.innerHTML = `
+                <div class="space-y-4">
+                    <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-orange-800">Bydlení celkem</span>
+                            <span class="text-xl font-bold text-orange-800">${budget.totalHousingExpenses.toLocaleString()} Kč</span>
+                        </div>
+                        <div class="space-y-1 text-sm text-orange-600">
+                            <div class="flex justify-between">
+                                <span>• Náklady na bydlení</span>
+                                <span>${budget.housingCosts.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Fond oprav</span>
+                                <span>${budget.repairFund.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Elektřina</span>
+                                <span>${budget.electricity.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Plyn</span>
+                                <span>${budget.gas.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Vodné/stočné</span>
+                                <span>${budget.water.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Topení</span>
+                                <span>${budget.heating.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Komunikace</span>
+                                <span>${budget.communication.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Pojištění domácnosti</span>
+                                <span>${budget.monthlyHomeInsurance.toLocaleString()} Kč</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="space-y-1 text-sm text-blue-600">
-                        <div class="flex justify-between">
-                            <span>• Operativní leasing/úvěr</span>
-                            <span>${budget.leasing.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Pohonné hmoty</span>
-                            <span>${budget.fuel.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Pojištění</span>
-                            <span>${budget.monthlyInsurance.toLocaleString()} Kč</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>• Pravidelný servis</span>
-                            <span>${budget.monthlyService.toLocaleString()} Kč</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-gray-800">Celkové výdaje</span>
-                        <span class="text-2xl font-bold text-gray-800">${budget.totalFixedExpenses.toLocaleString()} Kč</span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Update Budget Results Panel
-        const resultsDiv = document.getElementById('budgetResults');
-        resultsDiv.innerHTML = `
-            <div class="space-y-4">
-                <div class="flex justify-between items-center p-4 bg-green-50 rounded-2xl border border-green-100">
-                    <div>
-                        <div class="font-bold text-green-800">Úspory (20%)</div>
-                        <div class="text-sm text-green-600">Investice a dlouhodobé cíle</div>
-                    </div>
-                    <div class="text-xl font-bold text-green-800">${budget.savings.toLocaleString()} Kč</div>
-                </div>
-
-                <div class="flex justify-between items-center p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                    <div>
-                        <div class="font-bold text-blue-800">Volné prostředky</div>
-                        <div class="text-sm text-blue-600">Jídlo, zábava, nákupy</div>
-                    </div>
-                    <div class="text-xl font-bold text-blue-800">${budget.flexible.toLocaleString()} Kč</div>
-                </div>
-
-                <div class="flex justify-between items-center p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
-                    <div>
-                        <div class="font-bold text-yellow-800">Nouzová rezerva</div>
-                        <div class="text-sm text-yellow-600">Pokrok: ${budget.emergencyProgress}%</div>
-                    </div>
-                    <div class="text-xl font-bold text-yellow-800">${budget.emergency.toLocaleString()} Kč</div>
-                </div>
-
-                <div class="mt-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <h4 class="font-bold text-gray-800 mb-3">Celkové shrnutí</h4>
-                    <div class="text-sm text-gray-600 space-y-2">
-                        <div class="flex justify-between">
-                            <span>Celkové prostředky:</span>
-                            <span class="font-semibold">${budget.totalAvailable.toLocaleString()} Kč</span>
+                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-blue-800">Mobilita celkem</span>
+                            <span class="text-xl font-bold text-blue-800">${budget.totalMobilityExpenses.toLocaleString()} Kč</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span>Celkové výdaje:</span>
-                            <span class="font-semibold">${budget.totalFixedExpenses.toLocaleString()} Kč</span>
+                        <div class="space-y-1 text-sm text-blue-600">
+                            <div class="flex justify-between">
+                                <span>• Operativní leasing/úvěr</span>
+                                <span>${budget.leasing.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Pohonné hmoty</span>
+                                <span>${budget.fuel.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Pojištění</span>
+                                <span>${budget.monthlyInsurance.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Pravidelný servis</span>
+                                <span>${budget.monthlyService.toLocaleString()} Kč</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>Zbývá po výdajích:</span>
-                            <span class="font-semibold">${(budget.totalAvailable - budget.totalFixedExpenses).toLocaleString()} Kč</span>
+                    </div>
+
+                    <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-purple-800">Pravidelné výdaje celkem</span>
+                            <span class="text-xl font-bold text-purple-800">${budget.totalRegularExpenses.toLocaleString()} Kč</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span>Celkové úspory:</span>
-                            <span class="font-semibold">${(budget.savings + budget.emergency).toLocaleString()} Kč</span>
+                        <div class="space-y-1 text-sm text-purple-600">
+                            <div class="flex justify-between">
+                                <span>• Sport</span>
+                                <span>${budget.sport.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Streamovací služby</span>
+                                <span>${budget.streaming.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Předplatné měsíční</span>
+                                <span>${budget.monthlySubscriptions.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Předplatné roční</span>
+                                <span>${budget.monthlyAnnualSubscriptions.toLocaleString()} Kč</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>Míra úspor:</span>
-                            <span class="font-semibold">${((budget.savings + budget.emergency) / budget.totalAvailable * 100).toFixed(1)}%</span>
+                    </div>
+
+                    <div class="p-4 bg-red-50 rounded-2xl border border-red-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-red-800">Úvěry celkem</span>
+                            <span class="text-xl font-bold text-red-800">${budget.totalLoanExpenses.toLocaleString()} Kč</span>
+                        </div>
+                        <div class="space-y-1 text-sm text-red-600">
+                            <div class="flex justify-between">
+                                <span>• Bankovní úvěr - splátka</span>
+                                <span>${budget.bankLoans.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Nebankovní úvěr - splátka</span>
+                                <span>${budget.nonBankLoans.toLocaleString()} Kč</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-indigo-800">Plánované výdaje celkem</span>
+                            <span class="text-xl font-bold text-indigo-800">${budget.totalPlannedExpenses.toLocaleString()} Kč</span>
+                        </div>
+                        <div class="space-y-1 text-sm text-indigo-600">
+                            <div class="flex justify-between">
+                                <span>• Náklady na dovolenou</span>
+                                <span>${budget.monthlyHolidayCosts.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Jiný plánovaný výdaj měsíční</span>
+                                <span>${budget.investments.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Jiný plánovaný výdaj roční</span>
+                                <span>${budget.monthlyOtherAnnualExpense.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Školné roční</span>
+                                <span>${budget.monthlyTuition.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Výdaj na děti</span>
+                                <span>${budget.childrenExpenses.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>• Výdaj na mazlíčky</span>
+                                <span>${budget.petExpenses.toLocaleString()} Kč</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-800">Celkové výdaje</span>
+                            <span class="text-2xl font-bold text-gray-800">${budget.totalFixedExpenses.toLocaleString()} Kč</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
-    }
-</script>
+            `;
+
+            // Update Budget Results Panel
+            const resultsDiv = document.getElementById('budgetResults');
+            resultsDiv.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-green-50 rounded-2xl border border-green-100">
+                        <div>
+                            <div class="font-bold text-green-800">Úspory (20%)</div>
+                            <div class="text-sm text-green-600">Investice a dlouhodobé cíle</div>
+                        </div>
+                        <div class="text-xl font-bold text-green-800">${budget.savings.toLocaleString()} Kč</div>
+                    </div>
+
+                    <div class="flex justify-between items-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                        <div>
+                            <div class="font-bold text-emerald-800">Převod na benefit</div>
+                            <div class="text-sm text-emerald-600">Zaměstnavatel + osobní příspěvek</div>
+                        </div>
+                        <div class="text-xl font-bold text-emerald-800">${budget.benefitTransfer.toLocaleString()} Kč</div>
+                    </div>
+
+                    <div class="flex justify-between items-center p-4 ${budget.flexible < 10000 ? 'bg-red-50 border-red-200' : 'bg-blue-50 border-blue-100'} rounded-2xl border">
+                        <div>
+                            <div class="font-bold ${budget.flexible < 10000 ? 'text-red-800' : 'text-blue-800'}">Volné prostředky</div>
+                            <div class="text-sm ${budget.flexible < 10000 ? 'text-red-600' : 'text-blue-600'}">Jídlo, zábava, nákupy</div>
+                            ${budget.flexible < 10000 ? '<div class="text-xs text-red-500 mt-1">⚠️ Nízké volné prostředky!</div>' : ''}
+                        </div>
+                        <div class="text-xl font-bold ${budget.flexible < 10000 ? 'text-red-800' : 'text-blue-800'}">${budget.flexible.toLocaleString()} Kč</div>
+                    </div>
+
+                    ${budget.flexible < 10000 ? `
+                    <div class="p-4 bg-red-50 rounded-2xl border border-red-200">
+                        <div class="flex items-start">
+                            <div class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-red-800 mb-2">⚠️ Upozornění: Nízké volné prostředky</h4>
+                                <div class="text-sm text-red-700 space-y-2">
+                                    <p>Vaše volné prostředky jsou pod doporučenou hranicí 10 000 Kč měsíčně. To může znamenat:</p>
+                                    <ul class="list-disc list-inside space-y-1 ml-2">
+                                        <li>Nedostatek peněz na jídlo, základní potřeby a nečekané výdaje</li>
+                                        <li>Riziko zadlužení při neočekávaných situacích</li>
+                                        <li>Omezené možnosti pro kvalitní život a relaxaci</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <h5 class="font-semibold text-red-800 mb-2">💡 Doporučení pro přehodnocení rozpočtu:</h5>
+                                    <div class="text-sm text-red-700 space-y-1">
+                                        <p><strong>1. Zvyšte příjmy:</strong> Hledejte příležitosti pro vyšší plat, vedlejší příjem nebo bonusy</p>
+                                        <p><strong>2. Snižte fixní výdaje:</strong> Přehodnoťte náklady na bydlení, mobilitu a předplatná</p>
+                                        <p><strong>3. Optimalizujte úspory:</strong> Dočasně snižte míru spoření z 20% na 10-15%</p>
+                                        <p><strong>4. Přehodnoťte priority:</strong> Odložte některé plánované výdaje na později</p>
+                                        <p><strong>5. Sledujte výdaje:</strong> Detailně monitorujte, kam peníze skutečně jdou</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 p-3 bg-red-100 rounded-lg">
+                                    <div class="text-xs text-red-600">
+                                        <strong>Cíl:</strong> Dosáhnout alespoň 10 000 Kč volných prostředků měsíčně pro zdravý rozpočet
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="flex justify-between items-center p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
+                        <div>
+                            <div class="font-bold text-yellow-800">Nouzová rezerva</div>
+                            <div class="text-sm text-yellow-600">Pokrok: ${budget.emergencyProgress}%</div>
+                        </div>
+                        <div class="text-xl font-bold text-yellow-800">${budget.emergency.toLocaleString()} Kč</div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                        <h4 class="font-bold text-gray-800 mb-3">Celkové shrnutí</h4>
+                        <div class="text-sm text-gray-600 space-y-2">
+                            <div class="flex justify-between">
+                                <span>Celkové prostředky:</span>
+                                <span class="font-semibold">${budget.totalAvailable.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Celkové výdaje:</span>
+                                <span class="font-semibold">${budget.totalFixedExpenses.toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Zbývá po výdajích:</span>
+                                <span class="font-semibold">${(budget.totalAvailable - budget.totalFixedExpenses).toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Celkové úspory:</span>
+                                <span class="font-semibold">${(budget.savings + budget.emergency + budget.benefitTransfer).toLocaleString()} Kč</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Míra úspor:</span>
+                                <span class="font-semibold">${Math.round((budget.savings + budget.emergency + budget.benefitTransfer) / (budget.totalAvailable + budget.benefitTransfer) * 100)}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Update Budget Allocation Panel with Savings Envelopes
+            const allocationDiv = document.getElementById('budgetAllocation');
+            
+            // Calculate savings envelopes for annual expenses
+            const savingsEnvelopes = [];
+            
+            if (budget.homeInsurance > 0) {
+                savingsEnvelopes.push({
+                    name: 'Pojištění domácnosti',
+                    annual: budget.homeInsurance,
+                    monthly: budget.monthlyHomeInsurance,
+                    category: 'bydlení'
+                });
+            }
+            
+            if (budget.insurance > 0) {
+                savingsEnvelopes.push({
+                    name: 'Pojištění vozidla',
+                    annual: budget.insurance,
+                    monthly: budget.monthlyInsurance,
+                    category: 'mobilita'
+                });
+            }
+            
+            if (budget.service > 0) {
+                savingsEnvelopes.push({
+                    name: 'Servis vozidla',
+                    annual: budget.service,
+                    monthly: budget.monthlyService,
+                    category: 'mobilita'
+                });
+            }
+            
+            if (budget.annualSubscriptions > 0) {
+                savingsEnvelopes.push({
+                    name: 'Roční předplatné',
+                    annual: budget.annualSubscriptions,
+                    monthly: budget.monthlyAnnualSubscriptions,
+                    category: 'předplatné'
+                });
+            }
+            
+            if (budget.holidayCosts > 0) {
+                savingsEnvelopes.push({
+                    name: 'Dovolená',
+                    annual: budget.holidayCosts,
+                    monthly: budget.monthlyHolidayCosts,
+                    category: 'zábava'
+                });
+            }
+            
+            if (budget.otherAnnualExpense > 0) {
+                savingsEnvelopes.push({
+                    name: 'Jiný roční výdaj',
+                    annual: budget.otherAnnualExpense,
+                    monthly: budget.monthlyOtherAnnualExpense,
+                    category: 'ostatní'
+                });
+            }
+            
+            if (budget.tuition > 0) {
+                savingsEnvelopes.push({
+                    name: 'Školné',
+                    annual: budget.tuition,
+                    monthly: budget.monthlyTuition,
+                    category: 'vzdělání'
+                });
+            }
+
+            const totalEnvelopeSavings = savingsEnvelopes.reduce((sum, envelope) => sum + envelope.monthly, 0);
+            const totalWithEmergency = totalEnvelopeSavings + budget.emergency;
+
+            if (savingsEnvelopes.length > 0 || budget.emergency > 0) {
+                allocationDiv.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-4 bg-teal-50 rounded-2xl border border-teal-100">
+                            <h4 class="font-bold text-teal-800 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                Spořicí obálky
+                            </h4>
+                            <div class="text-sm text-teal-600 mb-4">
+                                Měsíčně si odkládejte tyto částky pro pokrytí výdajů a vytvoření rezervy
+                            </div>
+                            <div class="space-y-3">
+                                ${budget.emergency > 0 ? `
+                                <div class="flex justify-between items-center p-3 bg-white rounded-xl border border-yellow-100">
+                                    <div>
+                                        <div class="font-semibold text-yellow-800 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                            </svg>
+                                            Nouzová rezerva
+                                        </div>
+                                        <div class="text-xs text-yellow-600">Cíl: ${(budget.totalFixedExpenses * 3).toLocaleString()} - ${(budget.totalFixedExpenses * 6).toLocaleString()} Kč</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-yellow-800">${budget.emergency.toLocaleString()} Kč</div>
+                                        <div class="text-xs text-yellow-600">měsíčně</div>
+                                    </div>
+                                </div>
+                                ` : ''}
+                                ${savingsEnvelopes.map(envelope => {
+                                    const categoryColors = {
+                                        'bydlení': 'orange',
+                                        'mobilita': 'blue',
+                                        'předplatné': 'purple',
+                                        'zábava': 'pink',
+                                        'vzdělání': 'indigo',
+                                        'ostatní': 'gray'
+                                    };
+                                    const color = categoryColors[envelope.category] || 'gray';
+                                    
+                                    return `
+                                        <div class="flex justify-between items-center p-3 bg-white rounded-xl border border-${color}-100">
+                                            <div>
+                                                <div class="font-semibold text-${color}-800">${envelope.name}</div>
+                                                <div class="text-xs text-${color}-600">Roční výdaj: ${envelope.annual.toLocaleString()} Kč</div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="font-bold text-${color}-800">${envelope.monthly.toLocaleString()} Kč</div>
+                                                <div class="text-xs text-${color}-600">měsíčně</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-teal-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-teal-800">Celkem spořicí obálky:</span>
+                                    <span class="text-xl font-bold text-teal-800">${totalWithEmergency.toLocaleString()} Kč/měsíc</span>
+                                </div>
+                                <div class="text-sm text-teal-600 mt-1">
+                                    Za rok: ${(totalWithEmergency * 12).toLocaleString()} Kč
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <h4 class="font-bold text-gray-800 mb-3">💡 Tip pro spořicí obálky</h4>
+                            <div class="text-sm text-gray-600 space-y-2">
+                                <p>• Založte si samostatný spořicí účet pro každou obálku</p>
+                                <p>• Nastavte si automatické převody hned po připsání platu na BÚ</p>
+                                <p>• Když přijde čas platit roční výdaj, peníze už budete mít připravené</p>
+                                <p>• Zbývající peníze z obálek můžete na konci roku investovat</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                allocationDiv.innerHTML = `
+                    <div class="text-center text-gray-400 py-8">
+                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium">Žádné roční výdaje k rozdělení</p>
+                        <p class="text-xs text-gray-400 mt-1">Vyplňte roční výdaje pro zobrazení spořicích obálek</p>
+                    </div>
+                `;
+            }
+
+            // Update Investment Allocation Panel
+            const investmentDiv = document.getElementById('investmentAllocation');
+            
+            // Calculate investment allocations - Benefit goes to CZK investments, Savings split between USD/EUR
+            const czkInvestment = budget.benefitTransfer; // Benefit stays in CZK
+            const foreignInvestment = budget.savings; // Savings go to foreign currencies
+            
+            if (czkInvestment > 0 || foreignInvestment > 0) {
+                // Split foreign investment: 60% USD, 40% EUR
+                const usdAllocation = Math.round(foreignInvestment * 0.6);
+                const eurAllocation = foreignInvestment - usdAllocation;
+                
+                // Calculate foreign currency amounts if exchange rates are available
+                let usdAmount = 0;
+                let eurAmount = 0;
+                
+                if (exchangeRates.USD && exchangeRates.EUR) {
+                    usdAmount = Math.round(usdAllocation / exchangeRates.USD);
+                    eurAmount = Math.round(eurAllocation / exchangeRates.EUR);
+                }
+                
+                investmentDiv.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <h4 class="font-bold text-emerald-800 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                                Celkové prostředky k investování
+                            </h4>
+                            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                                <div class="p-3 bg-white rounded-xl border border-emerald-200">
+                                    <div class="text-sm text-emerald-600">Úspory (20%)</div>
+                                    <div class="text-lg font-bold text-emerald-800">${budget.savings.toLocaleString()} Kč</div>
+                                    <div class="text-xs text-emerald-500">→ USD/EUR investice</div>
+                                </div>
+                                <div class="p-3 bg-white rounded-xl border border-emerald-200">
+                                    <div class="text-sm text-emerald-600">Benefit</div>
+                                    <div class="text-lg font-bold text-emerald-800">${budget.benefitTransfer.toLocaleString()} Kč</div>
+                                    <div class="text-xs text-emerald-500">→ CZK investice</div>
+                                </div>
+                                <div class="p-3 bg-white rounded-xl border border-emerald-200">
+                                    <div class="text-sm text-emerald-600">Celkem</div>
+                                    <div class="text-xl font-bold text-emerald-800">${(czkInvestment + foreignInvestment).toLocaleString()} Kč</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border border-green-100">
+                            <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Doporučené rozdělení investic
+                            </h4>
+                            
+                            <div class="grid gap-4">
+                                ${czkInvestment > 0 ? `
+                                <div class="p-4 bg-green-50 rounded-xl border border-green-200">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
+                                                <span class="text-white font-bold text-sm">Kč</span>
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-green-800">Investice v CZK</div>
+                                                <div class="text-xs text-green-600">Benefit - domácí trh</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-green-600">Částka:</span>
+                                            <span class="font-bold text-green-800">${czkInvestment.toLocaleString()} Kč</span>
+                                        </div>
+                                        <div class="text-xs text-green-500">
+                                            Doporučení: České akcie, dluhopisy, REITs
+                                        </div>
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                ${foreignInvestment > 0 ? `
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white font-bold text-sm">$</span>
+                                                </div>
+                                                <div>
+                                                    <div class="font-bold text-blue-800">Investice v USD</div>
+                                                    <div class="text-xs text-blue-600">60% ze úspor</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-blue-600">Částka v CZK:</span>
+                                                <span class="font-bold text-blue-800">${usdAllocation.toLocaleString()} Kč</span>
+                                            </div>
+                                            ${exchangeRates.USD ? `
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-blue-600">Částka v USD:</span>
+                                                    <span class="font-bold text-blue-800">$${usdAmount.toLocaleString()}</span>
+                                                </div>
+                                                <div class="text-xs text-blue-500">
+                                                    Kurz: ${exchangeRates.USD.toFixed(2)} CZK/USD
+                                                </div>
+                                            ` : `
+                                                <div class="text-xs text-blue-500">
+                                                    Načítání kurzu pro přepočet...
+                                                </div>
+                                            `}
+                                        </div>
+                                    </div>
+
+                                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center mr-3">
+                                                    <span class="text-white font-bold text-sm">€</span>
+                                                </div>
+                                                <div>
+                                                    <div class="font-bold text-indigo-800">Investice v EUR</div>
+                                                    <div class="text-xs text-indigo-600">40% ze úspor</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between">
+                                                <span class="text-sm text-indigo-600">Částka v CZK:</span>
+                                                <span class="font-bold text-indigo-800">${eurAllocation.toLocaleString()} Kč</span>
+                                            </div>
+                                            ${exchangeRates.EUR ? `
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-indigo-600">Částka v EUR:</span>
+                                                    <span class="font-bold text-indigo-800">€${eurAmount.toLocaleString()}</span>
+                                                </div>
+                                                <div class="text-xs text-indigo-500">
+                                                    Kurz: ${exchangeRates.EUR.toFixed(2)} CZK/EUR
+                                                </div>
+                                            ` : `
+                                                <div class="text-xs text-indigo-500">
+                                                    Načítání kurzu pro přepočet...
+                                                </div>
+                                            `}
+                                        </div>
+                                    </div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <h4 class="font-bold text-gray-800 mb-3">💡 Investiční tipy</h4>
+                            <div class="text-sm text-gray-600 space-y-2">
+                                <p>• <strong>Diverzifikace:</strong> Rozdělte investice mezi různé trhy a měny</p>
+                                <p>• <strong>DCA strategie:</strong> Investujte pravidelně stejnou částku každý měsíc</p>
+                                <p>• <strong>ETF fondy:</strong> Zvažte široce diverzifikované indexové fondy</p>
+                                <p>• <strong>Dlouhodobý horizont:</strong> Investice držte minimálně 5-10 let</p>
+                                <p>• <strong>Benefit:</strong> Využijte daňové výhody zaměstnaneckých benefitů</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                investmentDiv.innerHTML = `
+                    <div class="text-center text-gray-400 py-8">
+                        <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium">Žádné prostředky k investování</p>
+                        <p class="text-xs text-gray-400 mt-1">Zvyšte příjmy nebo snižte výdaje pro vytvoření investičního prostoru</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95e0b4f9052a5d09',t:'MTc1MjMyNTA1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
